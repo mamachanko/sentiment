@@ -1,0 +1,3 @@
+interfaces:
+    barometer:
+        class: barometer.interfaces:Barometer

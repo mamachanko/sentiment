@@ -1,0 +1,9 @@
+interfaces:
+    inbound:
+        class: inbound.interfaces:Inbound
+
+twitter:
+    api_key: 4doctUxpTIJG9vseJ1UkOc9ns
+    api_secret: 8GcSYyVNtMz2V4lwzBIT65x24wglThvGrHtp3rmd1VtCv9RK6G
+    access_token: 463780397-cXczYybgJ0X9oEsMUzeLx0Nf6tCL8IWJ566MAiJv
+    access_token_secret: xRzCuGQZkh3rPSEqHkMn0advi85mBlULqxg7nRzc59Hxk

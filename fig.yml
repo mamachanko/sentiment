@@ -1,0 +1,21 @@
+zookeeper:
+    image: jplock/zookeeper
+
+rabbitmq:
+    image: dockerfile/rabbitmq
+    ports:
+      - "15672:15672"
+
+elasticsearch:
+    image: dockerfile/elasticsearch
+    volumes:
+      - /opt/elasticsearch_data:/data
+    ports:
+      - "9200:9200"
+
+barometer:
+    build: .
+    links:
+        - zookeeper:zk
+        - rabbitmq
+        - elasticsearch:es
