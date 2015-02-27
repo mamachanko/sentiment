@@ -11,5 +11,5 @@ event_system:
 
 instances:
     barometer:
-        command: lymph instance --conf=barometer.yml --reload --debug --loglevel=info
+        command: lymph instance --conf=barometer.yml --reload --debug --loglevel=info --logfile=/tmp/barometer.log
         numprocesses: 1

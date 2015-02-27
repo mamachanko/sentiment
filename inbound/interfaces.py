@@ -1,9 +1,12 @@
 import functools
 
 import lymph
+from lymph.utils.logging import setup_logger
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
+
+logger = setup_logger(__name__)
 
 
 class Inbound(lymph.Interface, StreamListener):
@@ -35,6 +38,7 @@ class TweetStreamListener(StreamListener):
         super(TweetStreamListener, self).__init__(*args, **kwargs)
 
     def on_data(self, data):
+        logger.info('data received %s', data)
         self.callback(data)
 
     def on_error(self, status):

@@ -2,9 +2,9 @@ FROM docker.lab38:5000/delivero/lymph-base
 
 MAINTAINER mamachanko
 
-ADD . /inbound
+ADD . /barometer
 
-WORKDIR inbound/
+WORKDIR barometer/
 
 RUN pip install -r requirements.txt
 
