@@ -1,0 +1,15 @@
+registry:
+    class: lymph.discovery.zookeeper:ZookeeperServiceRegistry
+    hosts: zk
+
+
+event_system:
+    class: lymph.events.kombu:KombuEventSystem
+    transport: amqp
+    hostname: rabbitmq
+
+
+instances:
+    barometer:
+        command: lymph instance --conf=barometer.yml --reload --debug --loglevel=info
+        numprocesses: 1

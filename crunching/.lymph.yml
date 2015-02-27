@@ -1,0 +1,15 @@
+registry:
+    class: lymph.discovery.zookeeper:ZookeeperServiceRegistry
+    hosts: zk
+
+
+event_system:
+    class: lymph.events.kombu:KombuEventSystem
+    transport: amqp
+    hostname: rabbitmq
+
+
+instances:
+    crunching:
+        command: lymph instance --conf=crunching.yml --reload --debug --loglevel=info
+        numprocesses: 1

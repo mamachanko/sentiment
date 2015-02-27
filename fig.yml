@@ -13,9 +13,20 @@ elasticsearch:
     ports:
       - "9200:9200"
 
-barometer:
-    build: .
+inbound:
+    build: inbound/
+    links:
+        - zookeeper:zk
+        - rabbitmq
+
+crunching:
+    build: inbound/
     links:
         - zookeeper:zk
         - rabbitmq
         - elasticsearch:es
+
+barometer:
+    build: barometer/
+    links:
+        - zookeeper:zk
