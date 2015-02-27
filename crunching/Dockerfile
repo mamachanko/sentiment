@@ -8,4 +8,4 @@ WORKDIR crunching/
 
 RUN pip install -r requirements.txt
 
-CMD lymph node --guess-external-ip
+CMD PYTHONPATH=. lymph node --guess-external-ip

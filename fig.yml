@@ -12,21 +12,42 @@ elasticsearch:
       - /opt/elasticsearch_data:/data
     ports:
       - "9200:9200"
+    expose:
+      - "9200"
+
+rabbitmqready:
+    image: aanand/wait
+    links:
+      - rabbitmq
 
 inbound:
     build: inbound/
     links:
         - zookeeper:zk
         - rabbitmq
+        - rabbitmqready
+    volumes:
+        - inbound:/inbound/
 
 crunching:
-    build: inbound/
+    build: crunching/
     links:
         - zookeeper:zk
         - rabbitmq
+        - rabbitmqready
         - elasticsearch:es
+    volumes:
+        - crunching:/crunching/
 
 barometer:
     build: barometer/
     links:
         - zookeeper:zk
+        - rabbitmq
+        - rabbitmqready
+    expose:
+        - "4080"
+    ports:
+        - "4080:4080"
+    volumes:
+        - barometer:/barometer/

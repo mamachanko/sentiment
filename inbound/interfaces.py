@@ -42,5 +42,5 @@ class TweetStreamListener(StreamListener):
         self.callback(data)
 
     def on_error(self, status):
-        print 'error:', status
+        logger.error(status)
 

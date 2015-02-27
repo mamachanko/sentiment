@@ -9,7 +9,7 @@ class Crunching(lymph.Interface):
 
     def on_start(self):
         super(Crunching, self).on_start()
-        self.es = Elasticsearch()
+        self.es = Elasticsearch(hosts='es')
 
     @lymph.event('data.received')
     def digest(self, event):
