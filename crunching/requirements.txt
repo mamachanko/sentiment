@@ -1,3 +1,4 @@
 elasticsearch
+elasticsearch-dsl
 git+ssh://git@github.com/deliveryhero/lymph@master#egg=lymph
 textblob

@@ -1,6 +1,7 @@
 import json
 
 from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search
 import lymph
 from textblob import TextBlob
 
@@ -12,7 +13,7 @@ class Crunching(lymph.Interface):
         self.es = Elasticsearch(hosts='es')
 
     @lymph.event('data.received')
-    def digest(self, event):
+    def ingest(self, event):
         data = json.loads(event.body)
         data['sentiment'] = self._get_sentiment(data['text'])
         self.es.index(index='sentiments', doc_type='sentiment-type', body=data)
@@ -23,13 +24,13 @@ class Crunching(lymph.Interface):
 
     @lymph.rpc()
     def avg(self):
-        result = self.es.search(
-            index='sentiments',
-            body={"aggs" : {"avg_sentiment" : {"avg" : {"field" : "sentiment"}}}}
-        )
-        return result['aggregations']['avg_sentiment']['value']
+        search = Search(using=self.es, index='sentiments')
+        search.aggs.bucket('avg_sentiment', 'avg', field='sentiment')
+        response = search.execute()
+        return response.aggregations['avg_sentiment']['value']
 
     @lymph.rpc()
     def count(self):
-        return self.es.count(index='sentiments', doc_type='sentiment-type')['count']
- 
+        search = Search(using=self.es, index='sentiments')
+        search.execute()
+        return search.count()
