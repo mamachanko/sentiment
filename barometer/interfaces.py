@@ -13,7 +13,7 @@ class Barometer(WebServiceInterface):
 
     def index(self, request):
         avg = self.crunching.avg()
-        body_color = self.get_color(avg)
+        body_color = self._get_color(avg)
         body = '''
         <html>
             <header>
@@ -26,7 +26,7 @@ class Barometer(WebServiceInterface):
         ''' % (body_color, avg)
         return Response(body, content_type='text/html')
 
-    def get_color(self, avg):
+    def _get_color(self, avg):
         offset = 255*(1-abs(avg))
         if avg < 0:
             return 'FF%02X00' % offset
