@@ -12,11 +12,11 @@ class Crunching(lymph.Interface):
         super(Crunching, self).on_start()
         self.es = Elasticsearch(hosts='es')
 
-    @lymph.event('data.received')
+    @lymph.event('item.received')
     def ingest(self, event):
-        data = json.loads(event.body)
-        data['sentiment'] = self._get_sentiment(data['text'])
-        self.es.index(index='sentiments', doc_type='sentiment-type', body=data)
+        item = json.loads(event.body)
+        item['sentiment'] = self._get_sentiment(item['text'])
+        self.es.index(index='items', doc_type='item', body=item)
 
     def _get_sentiment(self, text):
         text_blob = TextBlob(text)
@@ -24,13 +24,13 @@ class Crunching(lymph.Interface):
 
     @lymph.rpc()
     def avg(self):
-        search = Search(using=self.es, index='sentiments')
+        search = Search(using=self.es, index='items')
         search.aggs.bucket('avg_sentiment', 'avg', field='sentiment')
         response = search.execute()
         return response.aggregations['avg_sentiment']['value']
 
     @lymph.rpc()
     def count(self):
-        search = Search(using=self.es, index='sentiments')
+        search = Search(using=self.es, index='items')
         search.execute()
         return search.count()
