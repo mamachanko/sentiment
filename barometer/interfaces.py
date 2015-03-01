@@ -6,12 +6,11 @@ from werkzeug.wrappers import Response
 
 
 class Barometer(WebServiceInterface):
-
     crunching = lymph.proxy('crunching')
-
     url_map = Map([Rule('/', endpoint='index')])
 
     def index(self, request):
+        count = self.crunching.count()
         avg = self.crunching.avg()
         body_color = self._get_color(avg)
         body = '''
@@ -19,11 +18,11 @@ class Barometer(WebServiceInterface):
             <header>
                 <meta http-equiv="refresh" content="1">
             </header>
-            <body bgcolor="#%s">
-                %s
+            <body bgcolor="#{}">
+                count: {}, avg: {}
             </body>
         </html>
-        ''' % (body_color, avg)
+        '''.format(body_color, count, avg)
         return Response(body, content_type='text/html')
 
     def _get_color(self, avg):
