@@ -1,6 +1,10 @@
 # sentiment
 
-_sentiment_ is showcasing [_lymph_](https://github.com/deliveryhero/lymph), a framework for Python services. It's built by Delivery Hero.
+_sentiment_ is showcasing [_lymph_](https://github.com/deliveryhero/lymph),
+a framework for Python services. It's built by Delivery Hero.
+It's answering the industries' hottest question:
+
+> How do people feel about pizza?
 
 ## Introduction
 Let's say you want to know how people feel about "pizza" at this very moment? It's important for you, because maybe you're running a food ordering platform. Your marketing department wants to know what customers want or monitor the impact of a campaign.
@@ -22,7 +26,7 @@ wip
 
 ### Barometer
 
-<!-- ![The services](https://www.evernote.com/shard/s245/sh/fe91bde3-1b70-4088-a287-2edd4d2b15fd/d5d833d62785cf1b44caa8160b95ce02/res/2ad86331-4d25-4ed5-9e92-dc8512c9e767/skitch.png) -->
+![The services](https://www.evernote.com/shard/s245/sh/fe91bde3-1b70-4088-a287-2edd4d2b15fd/d5d833d62785cf1b44caa8160b95ce02/res/2ad86331-4d25-4ed5-9e92-dc8512c9e767/skitch.png)
 
 ## Setup
 We'll use [fig](https://fig.sh) and docker to run our services. Make sure you have all relevant docker tools installed. Getting `fig` is as simple as:
