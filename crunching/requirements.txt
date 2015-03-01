@@ -1,5 +1,5 @@
 elasticsearch
 elasticsearch-dsl
-git+ssh://git@github.com/deliveryhero/lymph@master#egg=lymph
+git+https://git@github.com/deliveryhero/lymph@master#egg=lymph
 textblob
 six==1.9.0

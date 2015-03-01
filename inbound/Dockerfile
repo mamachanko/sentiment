@@ -1,10 +1,10 @@
-FROM docker.lab38:5000/delivero/lymph-base
+FROM python:2.7.7
 
 MAINTAINER mamachanko
 
 ADD . /inbound
 
-WORKDIR inbound/
+WORKDIR /inbound/
 
 RUN pip install -r requirements.txt
 
