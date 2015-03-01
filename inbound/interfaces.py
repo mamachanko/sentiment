@@ -22,8 +22,9 @@ class Inbound(lymph.Interface, StreamListener):
         auth = OAuthHandler(api_key, api_secret)
         auth.set_access_token(access_token, access_token_secret)
         
-        callback = functools.partial(self.emit, 'item.received')
-        listener = TweetStreamListener(callback=callback)
+        listener = TweetStreamListener()
+        listener.register_callback(functools.partial(self.emit, 'item.received'))
+
         self.stream = Stream(auth, listener)
 
     def on_start(self):
@@ -34,12 +35,16 @@ class Inbound(lymph.Interface, StreamListener):
 class TweetStreamListener(StreamListener):
     
     def __init__(self, *args, **kwargs):
-        self.callback = kwargs.pop('callback') 
         super(TweetStreamListener, self).__init__(*args, **kwargs)
+        self.callbacks = []
+
+    def register_callback(self, callback):
+        self.callbacks.append(callback)
 
     def on_data(self, item):
         logger.info('item received %s', item)
-        self.callback(item)
+        for callback in self.callbacks:
+            callback(item)
 
     def on_error(self, status):
         logger.error(status)
