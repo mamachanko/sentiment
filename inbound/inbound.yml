@@ -3,7 +3,10 @@ interfaces:
         class: interfaces:Inbound
 
 twitter:
-    api_key: <>
-    api_secret: <>
-    access_token: <>
-    access_token_secret: <>
+    api_key: <add_me>
+    api_secret: <add_me>
+    access_token: <add_me>
+    access_token_secret: <add_me>
+
+track_terms:
+    - pizza

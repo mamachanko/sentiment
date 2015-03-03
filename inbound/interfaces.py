@@ -1,5 +1,6 @@
 import functools
 
+import gevent
 import lymph
 from lymph.utils.logging import setup_logger
 from tweepy.streaming import StreamListener
@@ -9,27 +10,25 @@ from tweepy import Stream
 logger = setup_logger(__name__)
 
 
-class Inbound(lymph.Interface, StreamListener):
+class Inbound(lymph.Interface):
 
     def apply_config(self, config):
         super(Inbound, self).apply_config(config)
+        self.stream = self._create_stream(**config.root.get('twitter'))
+        self.track_terms = config.root.get('track_terms')
 
-        api_key = config.root.get('twitter')['api_key']
-        api_secret = config.root.get('twitter')['api_secret']
-        access_token = config.root.get('twitter')['access_token']
-        access_token_secret = config.root.get('twitter')['access_token_secret']
-
+    def _create_stream(self, api_key, api_secret, access_token, access_token_secret): 
         auth = OAuthHandler(api_key, api_secret)
         auth.set_access_token(access_token, access_token_secret)
-        
+
         listener = TweetStreamListener()
         listener.register_callback(functools.partial(self.emit, 'item.received'))
 
-        self.stream = Stream(auth, listener)
+        return Stream(auth, listener)
 
     def on_start(self):
         super(Inbound, self).on_start()
-        self.stream.filter(track=['pizza'])
+        gevent.spawn(self.stream.filter, track=self.track_terms)
 
 
 class TweetStreamListener(StreamListener):
