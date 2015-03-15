@@ -22,13 +22,20 @@ class Barometer(WebServiceInterface):
     def index(self, request):
         count = self.crunching.count()
         avg = self.crunching.avg()
-        with open('index.html') as f:
-            template = f.read().decode('utf8')
+        template = self._read_resource('index.html').decode('utf8')
         body = pystache.render(
             template,
             {'body_color': self._get_color(avg), 'avg': avg, 'count': count}
         )
         return Response(body, content_type='text/html')
+
+    def static(self, request, path):
+        if path.startswith('css'):
+            content_type = 'text/css'
+        else:
+            content_type = 'image/png'
+        content = self._read_resource(request.path)
+        return Response(content, content_type=content_type)
 
     def _get_color(self, avg):
         offset = 255*(1-abs(avg))
@@ -36,12 +43,10 @@ class Barometer(WebServiceInterface):
             return 'FF%02X00' % offset
         return '%02XFF00' % offset
 
-    def static(self, request, path):
+    def _read_resource(self, path):
+        path = path.lstrip('/')
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        if path.startswith('css'):
-            content_type = 'text/css'
-        else:
-            content_type = 'image/png'
-        with open(current_dir + request.path, 'r') as static_resource:
-            content = static_resource.read()
-        return Response(content, content_type=content_type)
+        resource_path = os.path.join(current_dir, path)
+        logger.debug('reading resource %s', resource_path)
+        with open(resource_path) as resource:
+            return resource.read()
