@@ -41,7 +41,7 @@ class TweetStreamListener(StreamListener):
         self.callbacks.append(callback)
 
     def on_data(self, item):
-        logger.info('item received %s', item)
+        logger.debug('item received %s', item)
         for callback in self.callbacks:
             callback(item)
 
