@@ -1,0 +1,3 @@
+[submodule "barometer/static"]
+	path = barometer/static
+	url = https://github.com/dhg/Skeleton
