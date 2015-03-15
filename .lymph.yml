@@ -1,0 +1,20 @@
+registry:
+    class: lymph.discovery.zookeeper:ZookeeperServiceRegistry
+    hosts: zk
+ 
+ 
+event_system:
+    class: lymph.events.kombu:KombuEventSystem
+    transport: amqp
+    hostname: rabbitmq
+ 
+ 
+instances:
+    inbound:
+        command: lymph instance --config=inbound/inbound.yml --reload --debug --loglevel=info
+
+    crunching:
+       command: lymph instance --config=crunching/crunching.yml --reload --debug --loglevel=info
+
+    barometer:
+        command: lymph instance --config=barometer/barometer.yml --reload --debug --loglevel=debug

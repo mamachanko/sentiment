@@ -1,6 +1,6 @@
 interfaces:
     inbound:
-        class: interfaces:Inbound
+        class: inbound.interfaces:Inbound
 
 twitter:
     api_key: <add_me>
