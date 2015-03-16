@@ -9,4 +9,4 @@ twitter:
     access_token_secret: <add_me>
 
 track_terms:
-    - pizza
+    - python

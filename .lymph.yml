@@ -11,10 +11,10 @@ event_system:
  
 instances:
     inbound:
-        command: lymph instance --config=inbound/inbound.yml --reload --debug --loglevel=info
+        command: lymph instance --config=inbound/inbound.yml --reload --debug --loglevel=DEBUG
 
     crunching:
-       command: lymph instance --config=crunching/crunching.yml --reload --debug --loglevel=info
+       command: lymph instance --config=crunching/crunching.yml --reload --debug --loglevel=DEBUG
 
     barometer:
-        command: lymph instance --config=barometer/barometer.yml --reload --debug --loglevel=debug
+        command: lymph instance --config=barometer/barometer.yml --reload --debug --loglevel=DEBUG
