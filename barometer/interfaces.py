@@ -25,7 +25,7 @@ class Barometer(WebServiceInterface):
         template = self._read_resource('index.html').decode('utf8')
         body = pystache.render(
             template,
-            {'body_color': self._get_color(avg), 'avg': avg, 'count': count}
+            {'color': self._get_color(avg), 'avg': avg, 'count': count}
         )
         return Response(body, content_type='text/html')
 
