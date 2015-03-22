@@ -26,6 +26,10 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="icon" type="image/png" href="static/images/favicon.png">
 
+  <!-- Twitter 
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 </head>
 <body>
 
@@ -39,7 +43,9 @@
         <h5>Average sentiment: {{avg}}</h5>
         <h5>Ingested tweets: {{count}}</h5>
         <h5 style="background-color:#{{color}}">Color Scale</h5>
-      </div>
+        <h5> Most recent tweets</h5>
+        {{tweets}}
+        </div>
     </div>
   </div>
 

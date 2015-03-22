@@ -1,4 +1,5 @@
 import os
+from operator import itemgetter
 
 import lymph
 from lymph.utils.logging import setup_logger
@@ -20,7 +21,8 @@ class Barometer(WebServiceInterface):
 
     def index(self, request):
         template = self._read_resource('index.html').decode('utf8')
-        body = pystache.render(template, self._get_content())
+        renderer = pystache.Renderer(escape=lambda u: u)
+        body = renderer.render(template, self._get_content())
         return Response(body, content_type='text/html')
 
     def _get_content(self):
@@ -34,13 +36,25 @@ class Barometer(WebServiceInterface):
         else:
             color = self._get_color(avg)
             avg = '%.4f' % avg
-        return {'color': color, 'avg': avg, 'count': count}
+        return {'color': color,
+                'avg': avg,
+                'count': count,
+                'tweets': self._get_tweets()}
 
     def _get_color(self, avg):
         offset = 255*(1-abs(avg))
         if avg < 0:
             return 'FF%02X00' % offset
         return '%02XFF00' % offset
+
+    def _get_tweets(self):
+        try:
+            tweets = self.crunching.recent()
+        except (lymph.LookupFailure, lymph.Timeout):
+            return 'failed looking up tweets'
+        else:
+            html = map(itemgetter('html'), tweets)
+            return u''.join(html)
 
     def static(self, request, path):
         if path.startswith('css'):
