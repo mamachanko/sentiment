@@ -29,6 +29,16 @@ inbound:
     volumes:
         - inbound:/inbound/
 
+ingesting:
+    build: ingesting/
+    links:
+        - zookeeper:zk
+        - rabbitmq
+        - rabbitmqready
+        - elasticsearch:es
+    volumes:
+        - ingesting:/ingesting/
+
 crunching:
     build: crunching/
     links:

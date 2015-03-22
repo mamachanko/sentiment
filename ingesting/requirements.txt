@@ -1,0 +1,4 @@
+elasticsearch
+elasticsearch-dsl
+git+https://git@github.com/deliveryhero/lymph@master#egg=lymph
+six==1.9.0
