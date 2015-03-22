@@ -1,3 +1,6 @@
 interfaces:
+    ingesting:
+        class: crunching.interfaces:Ingesting
+
     crunching:
         class: crunching.interfaces:Crunching

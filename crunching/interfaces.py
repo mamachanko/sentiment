@@ -6,10 +6,10 @@ import lymph
 from textblob import TextBlob
 
 
-class Crunching(lymph.Interface):
+class Ingesting(lymph.Interface):
 
     def on_start(self):
-        super(Crunching, self).on_start()
+        super(Ingesting, self).on_start()
         self.es = Elasticsearch(hosts='es')
 
     @lymph.event('tweet.received')
@@ -21,6 +21,13 @@ class Crunching(lymph.Interface):
     def _get_sentiment(self, text):
         text_blob = TextBlob(text)
         return text_blob.sentiment.polarity
+
+
+class Crunching(lymph.Interface):
+
+    def on_start(self):
+        super(Crunching, self).on_start()
+        self.es = Elasticsearch(hosts='es')
 
     @lymph.rpc()
     def avg(self):
