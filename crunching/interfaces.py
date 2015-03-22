@@ -34,3 +34,10 @@ class Crunching(lymph.Interface):
         search = Search(using=self.es, index='tweets')
         search.execute()
         return search.count()
+
+    @lymph.rpc()
+    def recent(self, limit=5):
+        search = Search(using=self.es, index='tweets', extra={"size": limit})
+        search = search.sort('-timestamp_ms')
+        result = search.execute()
+        return map(lambda item: item.to_dict(), result)
