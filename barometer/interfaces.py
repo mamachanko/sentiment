@@ -19,14 +19,28 @@ class Barometer(WebServiceInterface):
     ])
 
     def index(self, request):
-        count = self.crunching.count()
-        avg = self.crunching.avg()
         template = self._read_resource('index.html').decode('utf8')
-        body = pystache.render(
-            template,
-            {'color': self._get_color(avg), 'avg': avg, 'count': count}
-        )
+        body = pystache.render(template, self._get_content())
         return Response(body, content_type='text/html')
+
+    def _get_content(self):
+        try:
+            count = self.crunching.count()
+            avg = self.crunching.avg()
+        except (lymph.LookupFailure, lymph.Timeout):
+            count = 'unkown'
+            avg = 'unkown'
+            color = 'FFFFFF'
+        else:
+            color = self._get_color(avg)
+            avg = '%.4f' % avg
+        return {'color': color, 'avg': avg, 'count': count}
+
+    def _get_color(self, avg):
+        offset = 255*(1-abs(avg))
+        if avg < 0:
+            return 'FF%02X00' % offset
+        return '%02XFF00' % offset
 
     def static(self, request, path):
         if path.startswith('css'):
@@ -35,12 +49,6 @@ class Barometer(WebServiceInterface):
             content_type = 'image/png'
         content = self._read_resource(request.path)
         return Response(content, content_type=content_type)
-
-    def _get_color(self, avg):
-        offset = 255*(1-abs(avg))
-        if avg < 0:
-            return 'FF%02X00' % offset
-        return '%02XFF00' % offset
 
     def _read_resource(self, path):
         path = path.lstrip('/')
