@@ -11,8 +11,7 @@ logger = setup_logger(__name__)
 
 
 class Barometer(WebServiceInterface):
-
-    crunching = lymph.proxy('crunching')
+    crunching = lymph.proxy('crunching', timeout=.75)
 
     url_map = Map([
         Rule('/', endpoint='index'),
