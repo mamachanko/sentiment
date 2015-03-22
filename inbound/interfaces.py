@@ -1,11 +1,10 @@
 import functools
+import json
 
 import gevent
 import lymph
 from lymph.utils.logging import setup_logger
-from tweepy.streaming import StreamListener
-from tweepy import OAuthHandler
-from tweepy import Stream
+import tweepy
 
 logger = setup_logger(__name__)
 
@@ -14,26 +13,39 @@ class Inbound(lymph.Interface):
 
     def apply_config(self, config):
         super(Inbound, self).apply_config(config)
-        self.stream = self._create_stream(**config.root.get('twitter'))
+        self.auth = self._create_auth(**config.root.get('twitter'))
+        self.stream = self._create_stream(self.auth)
+        self.api = tweepy.API(self.auth)
         self.track_terms = config.root.get('track_terms')
 
-    def _create_stream(self, api_key, api_secret, access_token, access_token_secret): 
-        auth = OAuthHandler(api_key, api_secret)
+    def _create_auth(self, api_key, api_secret, access_token, access_token_secret):
+        auth = tweepy.OAuthHandler(api_key, api_secret)
         auth.set_access_token(access_token, access_token_secret)
+        return auth
 
+    def _create_stream(self, auth): 
         listener = TweetStreamListener()
-        listener.register_callback(
-            functools.partial(self.emit, 'tweet.received')
-        )
+        listener.register_callback(self.tweet_received)
+        return tweepy.Stream(auth, listener)
 
-        return Stream(auth, listener)
+    def tweet_received(self, tweet):
+        tweet = json.loads(tweet) 
+        oembed = self.api.get_oembed(
+            tweet['id'],
+            hide_media=True,
+            hide_thread=True,
+            omit_script=1
+        )
+        tweet['html'] = oembed['html']
+        logger.debug('tweet received %s', tweet)
+        self.emit('tweet.received', json.dumps(tweet))
 
     def on_start(self):
         super(Inbound, self).on_start()
         gevent.spawn(self.stream.filter, track=self.track_terms)
 
 
-class TweetStreamListener(StreamListener):
+class TweetStreamListener(tweepy.streaming.StreamListener):
     
     def __init__(self, *args, **kwargs):
         super(TweetStreamListener, self).__init__(*args, **kwargs)
@@ -43,7 +55,6 @@ class TweetStreamListener(StreamListener):
         self.callbacks.append(callback)
 
     def on_data(self, tweet):
-        logger.debug('tweet received %s', tweet)
         for callback in self.callbacks:
             callback(tweet)
 
