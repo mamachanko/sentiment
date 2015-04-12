@@ -37,7 +37,7 @@ class Inbound(lymph.Interface):
             omit_script=1
         )
         tweet['html'] = oembed['html']
-        logger.debug('tweet received %s', tweet)
+        logger.info('tweet received %s...', str(tweet)[:150])
         self.emit('tweet.received', json.dumps(tweet))
 
     def on_start(self):
