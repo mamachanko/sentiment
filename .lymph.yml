@@ -16,14 +16,15 @@ dependencies:
  
  
 instances:
+
     inbound:
-        command: lymph instance --config=inbound/inbound.yml --reload --debug --loglevel=DEBUG
+        command: lymph instance --config=inbound.yml --reload --debug --loglevel=DEBUG --guess-external-ip
 
     ingesting:
-        command: lymph instance --config=ingesting/ingesting.yml --reload --debug --loglevel=DEBUG
+        command: lymph instance --config=ingesting.yml --reload --debug --loglevel=DEBUG --guess-external-ip
 
     crunching:
-       command: lymph instance --config=crunching/crunching.yml --reload --debug --loglevel=DEBUG
+       command: lymph instance --config=crunching.yml --reload --debug --loglevel=DEBUG --guess-external-ip
 
     barometer:
-        command: lymph instance --config=barometer/barometer.yml --reload --debug --loglevel=DEBUG
+        command: lymph instance --config=barometer.yml --reload --debug --loglevel=DEBUG
