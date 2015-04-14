@@ -17,5 +17,5 @@ dependencies:
 
 instances:
     crunching:
-        command: lymph instance --conf=crunching.yml --reload --debug --loglevel=info 
+        command: lymph instance --conf=crunching.yml --reload --debug --loglevel=info -g
         numprocesses: 1
